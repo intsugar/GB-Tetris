@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Tetris - Game Boy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #2c2c3a;
+      background-image: radial-gradient(ellipse at 50% 30%, #3a3a4e 0%, #2c2c3a 70%);
+      color: #ccc;
+      font-family: 'Press Start 2P', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+
+    /* ── Game Boy Shell ── */
+    #gameboy-shell {
+      background: linear-gradient(180deg, #c8c0b8 0%, #bab2a8 30%, #a8a098 100%);
+      border-radius: 14px 14px 14px 80px;
+      padding: 10px 16px 16px;
+      box-shadow:
+        0 2px 0 #d8d4cc inset,
+        -1px 0 0 #d0ccc4 inset,
+        1px 0 0 #d0ccc4 inset,
+        0 -2px 0 #908880 inset,
+        0 8px 40px rgba(0,0,0,0.55);
+      position: relative;
+      max-width: 360px;
+      width: 92vw;
+    }
+
+    /* Top notch */
+    #shell-notch {
+      width: 60px;
+      height: 5px;
+      background: linear-gradient(180deg, #908880, #a8a098);
+      border-radius: 0 0 4px 4px;
+      margin: 0 auto 6px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2) inset;
+    }
+
+    /* ── "GAME BOY" branding ── */
+    #brand-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      margin-bottom: 4px;
+      gap: 6px;
+    }
+    #brand-row .dot {
+      font-size: 0.5rem;
+      color: #5c4a78;
+      font-style: italic;
+    }
+    #brand-row .gb-text {
+      font-size: 0.85rem;
+      color: #2a2060;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-style: italic;
+      font-weight: bold;
+    }
+    #brand-row .tm {
+      font-size: 0.3rem;
+      color: #5c4a78;
+      vertical-align: super;
+    }
+
+    /* ── Screen area ── */
+    #screen-housing {
+      background: #4a4462;
+      border-radius: 10px 10px 10px 40px;
+      padding: 12px 14px 8px;
+      margin: 0 auto 6px;
+      box-shadow:
+        0 2px 6px rgba(0,0,0,0.4) inset,
+        0 -1px 0 rgba(255,255,255,0.08);
+    }
+
+    /* "DOT MATRIX WITH STEREO SOUND" */
+    #screen-label {
+      text-align: center;
+      margin-bottom: 4px;
+    }
+    #screen-label span {
+      font-size: 0.28rem;
+      color: #8880a0;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    #screen-bezel {
+      background: #8bac0f;
+      border: 3px solid #5a6a08;
+      border-radius: 4px;
+      padding: 4px;
+      position: relative;
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.3) inset;
+    }
+    #screen-wrapper {
+      position: relative;
+      overflow: hidden;
+      background: #9bbc0f;
+      border-radius: 2px;
+    }
+    canvas {
+      display: block;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    /* Scanline overlay for retro feel */
+    #screen-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.06) 2px,
+        rgba(0,0,0,0.06) 4px
+      );
+      pointer-events: none;
+    }
+
+    /* Power LED */
+    #led-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 4px;
+    }
+    .led-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4a2020;
+      box-shadow: 0 0 2px rgba(0,0,0,0.4) inset;
+    }
+    .led-dot.on {
+      background: #ff2020;
+      box-shadow: 0 0 6px #ff2020, 0 0 12px rgba(255,32,32,0.4);
+    }
+    .led-text {
+      font-size: 0.3rem;
+      color: #6a6260;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .battery-text {
+      font-size: 0.25rem;
+      color: #807870;
+      margin-left: auto;
+    }
+
+    /* ── Title label ── */
+    #game-title {
+      text-align: center;
+      font-size: 0.5rem;
+      color: #5a5248;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin: 4px 0;
+    }
+
+    /* ── Controls area on shell ── */
+    #controls-area {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 4px 4px 0;
+      min-height: 100px;
+    }
+
+    /* D-pad on shell (desktop decoration) */
+    .shell-dpad {
+      width: 80px;
+      height: 80px;
+      position: relative;
+    }
+    .shell-dpad-h, .shell-dpad-v {
+      position: absolute;
+      background: #2a2a2a;
+      border-radius: 3px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .shell-dpad-v {
+      width: 26px;
+      height: 80px;
+      left: 27px;
+      top: 0;
+    }
+    .shell-dpad-h {
+      width: 80px;
+      height: 26px;
+      left: 0;
+      top: 27px;
+    }
+    .shell-dpad-center {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      left: 27px;
+      top: 27px;
+      background: #333;
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    /* A/B buttons on shell */
+    .shell-buttons {
+      display: flex;
+      gap: 8px;
+      transform: rotate(-25deg);
+      margin-top: 10px;
+    }
+    .shell-ab {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #8a2060, #5a1040);
+      border: 2px solid #4a0a30;
+      box-shadow: 0 2px 0 #3a0820, 0 3px 6px rgba(0,0,0,0.3);
+    }
+
+    /* Start/Select decorative */
+    .shell-meta {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      margin-top: 6px;
+      padding-bottom: 4px;
+    }
+    .shell-pill {
+      width: 30px;
+      height: 8px;
+      background: #666;
+      border-radius: 4px;
+      transform: rotate(-25deg);
+      box-shadow: 0 1px 0 #444;
+    }
+
+    /* ── Start button overlay ── */
+    #start-btn {
+      margin-top: 4px;
+      padding: 6px 24px;
+      font-size: 0.55rem;
+      font-family: 'Press Start 2P', monospace;
+      background: #5a1848;
+      color: #e8d0e0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      display: none;
+      box-shadow: 0 3px 0 #3a0828, 0 4px 8px rgba(0,0,0,0.3);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    #start-btn:hover {
+      transform: translateY(1px);
+      box-shadow: 0 2px 0 #3a0828;
+    }
+    #start-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 0 0 #3a0828;
+    }
+
+    #loading {
+      color: #5a1848;
+      font-size: 0.5rem;
+      margin-top: 6px;
+      letter-spacing: 1px;
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* Speaker grille */
+    #speaker-grille {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      display: grid;
+      grid-template-columns: repeat(6, 4px);
+      grid-template-rows: repeat(6, 4px);
+      gap: 3px;
+      transform: rotate(-25deg);
+    }
+    .speaker-hole {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #908880;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.3) inset;
+    }
+
+    /* ── Desktop keyboard hints ── */
+    #kb-controls {
+      margin-top: 6px;
+      font-size: 0.4rem;
+      text-align: center;
+      color: #666;
+      line-height: 2.2;
+      letter-spacing: 0.5px;
+    }
+    #kb-controls kbd {
+      background: #bab2a8;
+      border: 1px solid #908880;
+      border-bottom: 2px solid #787068;
+      border-radius: 3px;
+      padding: 2px 6px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.33rem;
+      color: #333;
+    }
+
+    /* ── Mobile touch controller ── */
+    #mobile-controls {
+      display: none;
+      width: 100%;
+      max-width: 400px;
+      margin-top: 0;
+      padding: 10px 0 14px;
+      position: relative;
+      height: 170px;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      background: linear-gradient(180deg, #bab2a8, #a8a098);
+      border-radius: 0 0 14px 60px;
+      box-shadow:
+        0 4px 12px rgba(0,0,0,0.3),
+        0 1px 0 #ccc8c0 inset;
+    }
+
+    .joystick-zone {
+      position: absolute;
+      left: 12px;
+      top: 8px;
+      width: 140px;
+      height: 140px;
+    }
+    .joystick-base {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: #2a2a2a;
+      border: 3px solid #1a1a1a;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5) inset, 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .joystick-knob {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 35%, #555, #2a2a2a);
+      border: 2px solid #444;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.1) inset;
+      transition: none;
+    }
+
+    /* GB-style round purple A/B */
+    .action-buttons {
+      position: absolute;
+      right: 14px;
+      top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: rotate(-25deg);
+    }
+    .action-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #9a3070, #5a1040);
+      border: 3px solid #4a0a30;
+      color: #e8d0e0;
+      font-size: 0.55rem;
+      font-family: 'Press Start 2P', monospace;
+      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 0 #3a0820, 0 4px 8px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.15) inset;
+    }
+    .action-btn:active, .action-btn.pressed {
+      box-shadow: 0 1px 0 #3a0820, 0 1px 3px rgba(0,0,0,0.4);
+      transform: translateY(2px);
+    }
+
+    .meta-buttons {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 12px;
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+    .meta-btn-wrap { text-align: center; }
+    .meta-btn {
+      width: 44px;
+      height: 12px;
+      background: #555;
+      border: none;
+      border-radius: 6px;
+      transform: rotate(-25deg);
+      box-shadow: 0 2px 0 #333, 0 1px 4px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.1) inset;
+      display: block;
+      margin: 0 auto;
+    }
+    .meta-btn:active, .meta-btn.pressed {
+      box-shadow: 0 0 0 #333;
+      transform: rotate(-25deg) translateY(2px);
+    }
+    .meta-label {
+      font-size: 0.28rem;
+      color: #6a6260;
+      margin-top: 5px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-family: 'Press Start 2P', monospace;
+    }
+
+    #bottom-brand {
+      margin-top: 6px;
+      font-size: 0.28rem;
+      color: #555;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    @media (pointer: coarse) {
+      #mobile-controls { display: block; }
+      #kb-controls { display: none; }
+      #controls-area { display: none; }
+      .shell-meta { display: none; }
+      #gameboy-shell {
+        border-radius: 14px 14px 0 0;
+        padding-bottom: 6px;
+      }
+    }
+    @media (pointer: fine) {
+      #mobile-controls { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="gameboy-shell">
+    <div id="shell-notch"></div>
+
+    <div id="screen-housing">
+      <div id="screen-label"><span>Dot Matrix with Stereo Sound</span></div>
+      <div id="screen-bezel">
+        <div id="screen-wrapper">
+          <canvas id="gb-canvas" width="160" height="144"></canvas>
+        </div>
+      </div>
+      <div id="led-row">
+        <div class="led-dot" id="power-led"></div>
+        <span class="led-text">Power</span>
+        <span class="battery-text">Battery</span>
+      </div>
+    </div>
+
+    <div id="brand-row">
+      <span class="dot">●</span>
+      <span class="gb-text">Game Boy</span>
+      <span class="tm">TM</span>
+    </div>
+
+    <div id="game-title">Tetris</div>
+
+    <div style="text-align:center">
+      <div id="loading">Loading...</div>
+      <button id="start-btn">&#9654; Play</button>
+    </div>
+
+    <!-- Desktop decorative controls -->
+    <div id="controls-area">
+      <div class="shell-dpad">
+        <div class="shell-dpad-v"></div>
+        <div class="shell-dpad-h"></div>
+        <div class="shell-dpad-center"></div>
+      </div>
+      <div class="shell-buttons">
+        <div class="shell-ab"></div>
+        <div class="shell-ab"></div>
+      </div>
+    </div>
+    <div class="shell-meta">
+      <div class="shell-pill"></div>
+      <div class="shell-pill"></div>
+    </div>
+
+    <!-- Speaker -->
+    <div id="speaker-grille"></div>
+  </div>
+
+  <!-- Mobile touch controller -->
+  <div id="mobile-controls">
+    <div class="joystick-zone" id="joystick-zone">
+      <div class="joystick-base">
+        <div class="joystick-knob" id="joystick-knob"></div>
+      </div>
+    </div>
+    <div class="action-buttons">
+      <div><div class="action-btn" data-btn="b">B</div></div>
+      <div><div class="action-btn" data-btn="a">A</div></div>
+    </div>
+    <div class="meta-buttons">
+      <div class="meta-btn-wrap">
+        <div class="meta-btn" data-btn="select"></div>
+        <div class="meta-label">Select</div>
+      </div>
+      <div class="meta-btn-wrap">
+        <div class="meta-btn" data-btn="start"></div>
+        <div class="meta-label">Start</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="kb-controls">
+    <kbd>&#8592;&#8593;&#8594;&#8595;</kbd> Move &nbsp;&bull;&nbsp;
+    <kbd>Z</kbd> B &nbsp;&bull;&nbsp;
+    <kbd>X</kbd> A &nbsp;&bull;&nbsp;
+    <kbd>Enter</kbd> Start &nbsp;&bull;&nbsp;
+    <kbd>Shift</kbd> Select
+  </div>
+
+  <div id="bottom-brand">Nintendo&reg;</div>
+
+  <!-- Speaker grille dots (generated by JS) -->
+  <script>
+    // Generate speaker holes
+    (function() {
+      var g = document.getElementById('speaker-grille');
+      for (var i = 0; i < 36; i++) {
+        var d = document.createElement('div');
+        d.className = 'speaker-hole';
+        g.appendChild(d);
+      }
+    })();
+  </script>
+
+  <!-- Emulator dependencies -->
+  <script src="resize.js"></script>
+  <script src="resampler.js"></script>
+  <script src="XAudioServer.js"></script>
+  <script src="GameBoyCore.js"></script>
+  <script src="GameBoyIO.js"></script>
+
+  <script>
+    // ── Helper stubs needed by GameBoyIO ──
+    function cout(msg, level) {
+      if (level >= 2) console.error(msg);
+      else if (level === 1) console.warn(msg);
+    }
+    function findValue(key) {
+      try { var v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : null; }
+      catch(e) { return null; }
+    }
+    function setValue(key, val) {
+      try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+    }
+    function deleteValue(key) {
+      try { localStorage.removeItem(key); } catch(e) {}
+    }
+    function base64(data) {
+      var s = ''; for (var i = 0; i < data.length; i++) s += String.fromCharCode(data[i]);
+      return window.btoa(s);
+    }
+    function base64ToArray(str) {
+      var b = window.atob(str);
+      var a = [];
+      for (var i = 0; i < b.length; i++) a.push(b.charCodeAt(i));
+      return a;
+    }
+    function arrayToBase64(arr) { return base64(arr); }
+    function to_byte(n) { return String.fromCharCode(n & 0xFF); }
+    function to_little_endian_dword(n) {
+      return String.fromCharCode(n & 0xFF) + String.fromCharCode((n >> 8) & 0xFF) +
+             String.fromCharCode((n >> 16) & 0xFF) + String.fromCharCode((n >> 24) & 0xFF);
+    }
+
+    // ── Init ──
+    var canvas = document.getElementById('gb-canvas');
+    var startBtn = document.getElementById('start-btn');
+    var loadingEl = document.getElementById('loading');
+    var powerLed = document.getElementById('power-led');
+
+    function scaleCanvas() {
+      var housing = document.getElementById('screen-bezel');
+      var maxW = housing.clientWidth - 16;
+      var scale = maxW / 160;
+      canvas.style.width = Math.floor(160 * scale) + 'px';
+      canvas.style.height = Math.floor(144 * scale) + 'px';
+    }
+    scaleCanvas();
+    window.addEventListener('resize', scaleCanvas);
+
+    // Load ROM
+    fetch('rom.gb')
+      .then(function(r) { return r.arrayBuffer(); })
+      .then(function(buf) {
+        var data = new Uint8Array(buf);
+        var str = '';
+        for (var i = 0; i < data.length; i++) {
+          str += String.fromCharCode(data[i]);
+        }
+        window._romData = str;
+        loadingEl.style.display = 'none';
+        startBtn.style.display = 'inline-block';
+        startBtn.addEventListener('click', function() {
+          startBtn.style.display = 'none';
+          powerLed.classList.add('on');
+          start(canvas, window._romData);
+        });
+      })
+      .catch(function() {
+        loadingEl.textContent = 'ROM not found.';
+      });
+
+    // ── Keyboard ──
+    var KEY_MAP = {
+      ArrowRight: 'right', ArrowLeft: 'left', ArrowUp: 'up', ArrowDown: 'down',
+      KeyX: 'a', KeyZ: 'b', ShiftLeft: 'select', ShiftRight: 'select', Enter: 'start'
+    };
+    document.addEventListener('keydown', function(e) {
+      var k = KEY_MAP[e.code];
+      if (k) { GameBoyKeyDown(k); e.preventDefault(); }
+    });
+    document.addEventListener('keyup', function(e) {
+      var k = KEY_MAP[e.code];
+      if (k) { GameBoyKeyUp(k); e.preventDefault(); }
+    });
+
+    // ── Virtual joystick ──
+    (function() {
+      var zone = document.getElementById('joystick-zone');
+      var knob = document.getElementById('joystick-knob');
+      var activeTouch = null;
+      var maxDist = 36;
+      var deadZone = 0.3;
+      var currentDirs = { up: false, down: false, left: false, right: false };
+
+      function updateDirs(dirs) {
+        ['up','down','left','right'].forEach(function(d) {
+          if (dirs[d] && !currentDirs[d]) GameBoyKeyDown(d);
+          if (!dirs[d] && currentDirs[d]) GameBoyKeyUp(d);
+          currentDirs[d] = dirs[d];
+        });
+      }
+
+      function handleMove(cx, cy) {
+        var rect = zone.getBoundingClientRect();
+        var centerX = rect.left + rect.width / 2;
+        var centerY = rect.top + rect.height / 2;
+        var dx = cx - centerX;
+        var dy = cy - centerY;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > maxDist) { dx = dx / dist * maxDist; dy = dy / dist * maxDist; dist = maxDist; }
+        knob.style.transform = 'translate(calc(-50% + ' + dx + 'px), calc(-50% + ' + dy + 'px))';
+        var norm = dist / maxDist;
+        if (norm < deadZone) {
+          updateDirs({ up: false, down: false, left: false, right: false });
+          return;
+        }
+        var angle = Math.atan2(dy, dx); // right=0, down=π/2, left=±π, up=-π/2
+        var dirs = { up: false, down: false, left: false, right: false };
+        // Cardinal + diagonal zones (each 135° arc)
+        if (angle > -2.75 && angle < -0.39) dirs.up = true;
+        if (angle > 0.39 && angle < 2.75) dirs.down = true;
+        if (Math.abs(angle) > 1.96) dirs.left = true;
+        if (Math.abs(angle) < 1.18) dirs.right = true;
+        updateDirs(dirs);
+      }
+
+      function resetStick() {
+        knob.style.transform = 'translate(-50%, -50%)';
+        updateDirs({ up: false, down: false, left: false, right: false });
+        activeTouch = null;
+      }
+
+      zone.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        activeTouch = e.changedTouches[0].identifier;
+        handleMove(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+      }, { passive: false });
+
+      document.addEventListener('touchmove', function(e) {
+        if (activeTouch === null) return;
+        for (var i = 0; i < e.changedTouches.length; i++) {
+          if (e.changedTouches[i].identifier === activeTouch) {
+            e.preventDefault();
+            handleMove(e.changedTouches[i].clientX, e.changedTouches[i].clientY);
+            return;
+          }
+        }
+      }, { passive: false });
+
+      document.addEventListener('touchend', function(e) {
+        for (var i = 0; i < e.changedTouches.length; i++) {
+          if (e.changedTouches[i].identifier === activeTouch) { resetStick(); return; }
+        }
+      });
+      document.addEventListener('touchcancel', function(e) {
+        for (var i = 0; i < e.changedTouches.length; i++) {
+          if (e.changedTouches[i].identifier === activeTouch) { resetStick(); return; }
+        }
+      });
+    })();
+
+    // ── Action & meta button touch ──
+    document.querySelectorAll('[data-btn]').forEach(function(el) {
+      function press(e) {
+        e.preventDefault();
+        GameBoyKeyDown(el.getAttribute('data-btn'));
+        el.classList.add('pressed');
+      }
+      function release(e) {
+        e.preventDefault();
+        GameBoyKeyUp(el.getAttribute('data-btn'));
+        el.classList.remove('pressed');
+      }
+      el.addEventListener('touchstart', press, { passive: false });
+      el.addEventListener('touchend', release, { passive: false });
+      el.addEventListener('touchcancel', release, { passive: false });
+    });
+  </script>
+</body>
+</html>
