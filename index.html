@@ -7,106 +7,115 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@900&display=swap');
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: #2c2c3a;
-      background-image: radial-gradient(ellipse at 50% 30%, #3a3a4e 0%, #2c2c3a 70%);
-      color: #ccc;
+      background: #1a1a28;
+      background-image: radial-gradient(ellipse at 50% 30%, #28283e 0%, #1a1a28 70%);
       font-family: 'Press Start 2P', monospace;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden;
       touch-action: manipulation;
     }
 
-    /* ── Game Boy Shell ── */
-    #gameboy-shell {
-      background: linear-gradient(180deg, #c8c0b8 0%, #bab2a8 30%, #a8a098 100%);
-      border-radius: 14px 14px 14px 80px;
-      padding: 10px 16px 16px;
-      box-shadow:
-        0 2px 0 #d8d4cc inset,
-        -1px 0 0 #d0ccc4 inset,
-        1px 0 0 #d0ccc4 inset,
-        0 -2px 0 #908880 inset,
-        0 8px 40px rgba(0,0,0,0.55);
+    /* ═══════════════════════════════════════════
+       GAME BOY DMG-01 SHELL
+       ═══════════════════════════════════════════ */
+    #gb-shell {
+      background: linear-gradient(180deg, #d2d0c9 0%, #c5c3bb 50%, #bab7af 100%);
+      border-radius: 10px 10px 10px 10px;
+      width: 340px;
+      max-width: 95vw;
+      padding: 0;
       position: relative;
-      max-width: 360px;
-      width: 92vw;
+      box-shadow:
+        2px 0 0 #dedbd4 inset,
+        -2px 0 0 #a8a59e inset,
+        0 2px 0 #e2dfd8 inset,
+        0 -3px 0 #9a978f inset,
+        0 8px 40px rgba(0,0,0,0.5);
     }
 
-    /* Top notch */
-    #shell-notch {
-      width: 60px;
-      height: 5px;
-      background: linear-gradient(180deg, #908880, #a8a098);
-      border-radius: 0 0 4px 4px;
-      margin: 0 auto 6px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.2) inset;
-    }
-
-    /* ── "GAME BOY" branding ── */
-    #brand-row {
+    /* ── OFF•ON switch at top ── */
+    #power-switch-area {
       display: flex;
-      align-items: baseline;
-      justify-content: center;
-      margin-bottom: 4px;
-      gap: 6px;
+      justify-content: flex-start;
+      padding: 6px 20px 2px;
     }
-    #brand-row .dot {
-      font-size: 0.5rem;
-      color: #5c4a78;
-      font-style: italic;
-    }
-    #brand-row .gb-text {
-      font-size: 0.85rem;
-      color: #2a2060;
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      font-style: italic;
+    #power-switch {
+      background: linear-gradient(180deg, #a8a59e, #8a877f);
+      border-radius: 3px;
+      padding: 2px 10px;
+      font-size: 0.3rem;
+      color: #555;
+      letter-spacing: 2px;
+      border: 1px solid #908d85;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+      font-family: Arial, sans-serif;
       font-weight: bold;
     }
-    #brand-row .tm {
-      font-size: 0.3rem;
-      color: #5c4a78;
-      vertical-align: super;
+
+    /* ── Horizontal line under switch ── */
+    #top-line {
+      height: 2px;
+      background: linear-gradient(90deg, #bab7af, #a5a29a, #bab7af);
+      margin: 4px 8px 0;
     }
 
-    /* ── Screen area ── */
+    /* ═══════════════════════════════════════════
+       SCREEN HOUSING (purple/dark area)
+       ═══════════════════════════════════════════ */
     #screen-housing {
-      background: #4a4462;
-      border-radius: 10px 10px 10px 40px;
-      padding: 12px 14px 8px;
-      margin: 0 auto 6px;
-      box-shadow:
-        0 2px 6px rgba(0,0,0,0.4) inset,
-        0 -1px 0 rgba(255,255,255,0.08);
-    }
-
-    /* "DOT MATRIX WITH STEREO SOUND" */
-    #screen-label {
-      text-align: center;
-      margin-bottom: 4px;
-    }
-    #screen-label span {
-      font-size: 0.28rem;
-      color: #8880a0;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    #screen-bezel {
-      background: #8bac0f;
-      border: 3px solid #5a6a08;
-      border-radius: 4px;
-      padding: 4px;
+      background: linear-gradient(180deg, #5b5278 0%, #4d4568 50%, #45406a 100%);
+      border-radius: 12px 12px 12px 48px;
+      margin: 6px 14px 0;
+      padding: 10px 16px 10px;
       position: relative;
       box-shadow:
-        0 2px 8px rgba(0,0,0,0.3) inset;
+        0 1px 4px rgba(0,0,0,0.3) inset,
+        0 -1px 0 rgba(255,255,255,0.06);
+    }
+
+    /* "DOT MATRIX WITH STEREO SOUND" with colored lines */
+    #screen-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .label-line {
+      flex: 1;
+      height: 3px;
+      border-radius: 2px;
+    }
+    .line-left { background: linear-gradient(90deg, transparent 0%, #2a2468 30%, #3535a8 100%); }
+    .line-right { background: linear-gradient(90deg, #c83060 0%, #882040 70%, transparent 100%); }
+    .label-text {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.42rem;
+      color: #a098b8;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      font-weight: bold;
+    }
+
+    /* Green LCD bezel */
+    #screen-bezel {
+      background: #8a9e18;
+      border: 3px solid #6a7a10;
+      border-radius: 5px;
+      padding: 6px;
+      box-shadow:
+        0 3px 10px rgba(0,0,0,0.35) inset,
+        0 0 0 1px rgba(0,0,0,0.15);
     }
     #screen-wrapper {
       position: relative;
@@ -119,345 +128,437 @@
       image-rendering: pixelated;
       image-rendering: crisp-edges;
     }
-
-    /* Scanline overlay for retro feel */
+    /* Scanlines */
     #screen-wrapper::after {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0,0,0,0.06) 2px,
-        rgba(0,0,0,0.06) 4px
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px
       );
       pointer-events: none;
     }
 
-    /* Power LED */
+    /* Battery LED row */
     #led-row {
       display: flex;
       align-items: center;
-      gap: 5px;
-      margin-top: 4px;
+      gap: 4px;
+      margin-top: 6px;
     }
     .led-dot {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      background: #4a2020;
+      background: #6a2020;
       box-shadow: 0 0 2px rgba(0,0,0,0.4) inset;
     }
     .led-dot.on {
-      background: #ff2020;
-      box-shadow: 0 0 6px #ff2020, 0 0 12px rgba(255,32,32,0.4);
+      background: #ff2222;
+      box-shadow: 0 0 8px #ff2222, 0 0 16px rgba(255,32,32,0.4);
     }
-    .led-text {
-      font-size: 0.3rem;
-      color: #6a6260;
+    .led-label {
+      font-family: Arial, sans-serif;
+      font-size: 0.32rem;
+      color: #7a7290;
+      text-transform: uppercase;
       letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-    .battery-text {
-      font-size: 0.25rem;
-      color: #807870;
-      margin-left: auto;
+      font-weight: bold;
     }
 
-    /* ── Title label ── */
-    #game-title {
-      text-align: center;
-      font-size: 0.5rem;
-      color: #5a5248;
-      text-transform: uppercase;
+    /* ═══════════════════════════════════════════
+       BRANDING: Nintendo GAME BOY TM
+       ═══════════════════════════════════════════ */
+    #brand-area {
+      text-align: left;
+      padding: 8px 24px 2px;
+    }
+    .brand-nintendo {
+      font-family: 'Nunito', Arial, sans-serif;
+      font-size: 0.9rem;
+      font-weight: 900;
+      color: #2a2668;
+      font-style: italic;
+      letter-spacing: 0px;
+    }
+    .brand-gameboy {
+      font-family: 'Nunito', Arial, sans-serif;
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: #2a2668;
+      font-style: italic;
       letter-spacing: 2px;
-      margin: 4px 0;
+      margin-left: 4px;
+    }
+    .brand-tm {
+      font-family: Arial, sans-serif;
+      font-size: 0.35rem;
+      color: #2a2668;
+      vertical-align: super;
+      font-weight: bold;
     }
 
-    /* ── Controls area on shell ── */
-    #controls-area {
+    /* ═══════════════════════════════════════════
+       DESKTOP CONTROLS (decorative)
+       ═══════════════════════════════════════════ */
+    #controls-section {
+      padding: 6px 20px 0;
+    }
+    #controls-row {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      padding: 4px 4px 0;
-      min-height: 100px;
     }
 
-    /* D-pad on shell (desktop decoration) */
-    .shell-dpad {
-      width: 80px;
-      height: 80px;
+    /* D-Pad */
+    .dpad-container {
+      position: relative;
+      width: 100px;
+      height: 100px;
+    }
+    .dpad-circle {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%,-50%);
+      width: 95px; height: 95px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #c0bdb5 0%, #b5b2aa 100%);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15) inset;
+    }
+    .dpad-v, .dpad-h {
+      position: absolute;
+      background: linear-gradient(180deg, #3a3a3a, #2a2a2a);
+      border-radius: 4px;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.4);
+    }
+    .dpad-v {
+      width: 30px; height: 95px;
+      left: 50%; top: 50%;
+      transform: translate(-50%,-50%);
+    }
+    .dpad-h {
+      width: 95px; height: 30px;
+      left: 50%; top: 50%;
+      transform: translate(-50%,-50%);
+    }
+    .dpad-center {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%,-50%);
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: #353535;
+      z-index: 2;
+    }
+    /* Arrow triangles */
+    .dpad-arrow {
+      position: absolute;
+      z-index: 3;
+      width: 0; height: 0;
+    }
+    .arrow-up { left: 50%; top: 8px; transform: translateX(-50%); border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 7px solid #666; }
+    .arrow-down { left: 50%; bottom: 8px; transform: translateX(-50%); border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid #666; }
+    .arrow-left { top: 50%; left: 8px; transform: translateY(-50%); border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-right: 7px solid #666; }
+    .arrow-right { top: 50%; right: 8px; transform: translateY(-50%); border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 7px solid #666; }
+
+    /* A/B Buttons on pill-shaped base */
+    .ab-area {
+      position: relative;
+      margin-top: 12px;
+    }
+    .ab-base {
+      width: 120px;
+      height: 52px;
+      background: #c0bdb5;
+      border-radius: 26px;
+      transform: rotate(-25deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.12) inset;
       position: relative;
     }
-    .shell-dpad-h, .shell-dpad-v {
-      position: absolute;
-      background: #2a2a2a;
-      border-radius: 3px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    }
-    .shell-dpad-v {
-      width: 26px;
-      height: 80px;
-      left: 27px;
-      top: 0;
-    }
-    .shell-dpad-h {
-      width: 80px;
-      height: 26px;
-      left: 0;
-      top: 27px;
-    }
-    .shell-dpad-center {
-      position: absolute;
-      width: 26px;
-      height: 26px;
-      left: 27px;
-      top: 27px;
-      background: #333;
+    .shell-btn {
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      z-index: 1;
+      background: radial-gradient(circle at 40% 35%, #d83888, #a81858);
+      border: 2px solid #901048;
+      box-shadow:
+        0 3px 0 #701038,
+        0 4px 6px rgba(0,0,0,0.3),
+        0 1px 0 rgba(255,255,255,0.2) inset;
     }
+    .shell-btn-label {
+      position: absolute;
+      font-family: 'Nunito', Arial, sans-serif;
+      font-size: 0.55rem;
+      font-weight: 900;
+      color: #2a2668;
+      font-style: italic;
+    }
+    .label-b { bottom: -18px; left: 22px; }
+    .label-a { bottom: -18px; right: 4px; }
 
-    /* A/B buttons on shell */
-    .shell-buttons {
+    /* SELECT / START pills */
+    #meta-row {
       display: flex;
-      gap: 8px;
-      transform: rotate(-25deg);
-      margin-top: 10px;
-    }
-    .shell-ab {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 40% 35%, #8a2060, #5a1040);
-      border: 2px solid #4a0a30;
-      box-shadow: 0 2px 0 #3a0820, 0 3px 6px rgba(0,0,0,0.3);
-    }
-
-    /* Start/Select decorative */
-    .shell-meta {
-      display: flex;
-      gap: 14px;
       justify-content: center;
-      margin-top: 6px;
-      padding-bottom: 4px;
+      gap: 20px;
+      padding: 12px 0 4px;
+      margin-left: -15px;
     }
-    .shell-pill {
-      width: 30px;
-      height: 8px;
-      background: #666;
-      border-radius: 4px;
+    .meta-wrap { text-align: center; }
+    .shell-meta-btn {
+      width: 40px;
+      height: 10px;
+      background: linear-gradient(180deg, #8a877f, #7a7770);
+      border-radius: 5px;
       transform: rotate(-25deg);
-      box-shadow: 0 1px 0 #444;
+      box-shadow: 0 1px 0 #605d55, 0 2px 3px rgba(0,0,0,0.2);
+      margin: 0 auto;
+    }
+    .meta-text {
+      font-family: 'Nunito', Arial, sans-serif;
+      font-size: 0.4rem;
+      font-weight: 900;
+      color: #2a2668;
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-style: italic;
     }
 
-    /* ── Start button overlay ── */
+    /* Speaker grille (diagonal slits) */
+    #speaker-area {
+      position: absolute;
+      bottom: 18px;
+      right: 18px;
+      transform: rotate(-25deg);
+    }
+    .speaker-slit {
+      width: 28px;
+      height: 3px;
+      background: #a09d95;
+      border-radius: 2px;
+      margin-bottom: 5px;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.2) inset;
+    }
+
+    /* Phones jack label */
+    #phones-label {
+      text-align: center;
+      padding: 8px 0 10px;
+      font-family: Arial, sans-serif;
+      font-size: 0.3rem;
+      color: #9a978f;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    /* ═══════════════════════════════════════════
+       START BUTTON / LOADING
+       ═══════════════════════════════════════════ */
+    #game-controls-overlay {
+      text-align: center;
+      padding: 4px 0 2px;
+    }
     #start-btn {
-      margin-top: 4px;
       padding: 6px 24px;
       font-size: 0.55rem;
       font-family: 'Press Start 2P', monospace;
-      background: #5a1848;
-      color: #e8d0e0;
+      background: #2a2668;
+      color: #d0cce8;
       border: none;
       border-radius: 4px;
       cursor: pointer;
       text-transform: uppercase;
       letter-spacing: 2px;
       display: none;
-      box-shadow: 0 3px 0 #3a0828, 0 4px 8px rgba(0,0,0,0.3);
+      box-shadow: 0 3px 0 #1a1848, 0 4px 8px rgba(0,0,0,0.3);
       transition: transform 0.1s, box-shadow 0.1s;
     }
-    #start-btn:hover {
-      transform: translateY(1px);
-      box-shadow: 0 2px 0 #3a0828;
-    }
-    #start-btn:active {
-      transform: translateY(3px);
-      box-shadow: 0 0 0 #3a0828;
-    }
-
+    #start-btn:hover { transform: translateY(1px); box-shadow: 0 2px 0 #1a1848; }
+    #start-btn:active { transform: translateY(3px); box-shadow: 0 0 0 #1a1848; }
     #loading {
-      color: #5a1848;
+      color: #2a2668;
       font-size: 0.5rem;
-      margin-top: 6px;
       letter-spacing: 1px;
       animation: blink 1s steps(1) infinite;
     }
     @keyframes blink { 50% { opacity: 0; } }
 
-    /* Speaker grille */
-    #speaker-grille {
-      position: absolute;
-      bottom: 12px;
-      right: 14px;
-      display: grid;
-      grid-template-columns: repeat(6, 4px);
-      grid-template-rows: repeat(6, 4px);
-      gap: 3px;
-      transform: rotate(-25deg);
-    }
-    .speaker-hole {
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: #908880;
-      box-shadow: 0 1px 1px rgba(0,0,0,0.3) inset;
-    }
-
-    /* ── Desktop keyboard hints ── */
+    /* ═══════════════════════════════════════════
+       KEYBOARD HINTS (desktop)
+       ═══════════════════════════════════════════ */
     #kb-controls {
       margin-top: 6px;
-      font-size: 0.4rem;
+      font-size: 0.38rem;
       text-align: center;
-      color: #666;
+      color: #555;
       line-height: 2.2;
-      letter-spacing: 0.5px;
     }
     #kb-controls kbd {
-      background: #bab2a8;
-      border: 1px solid #908880;
-      border-bottom: 2px solid #787068;
+      background: #c5c3bb;
+      border: 1px solid #a5a29a;
+      border-bottom: 2px solid #8a877f;
       border-radius: 3px;
       padding: 2px 6px;
       font-family: 'Press Start 2P', monospace;
-      font-size: 0.33rem;
+      font-size: 0.3rem;
       color: #333;
     }
 
-    /* ── Mobile touch controller ── */
+    /* ═══════════════════════════════════════════
+       MOBILE TOUCH CONTROLS
+       ═══════════════════════════════════════════ */
     #mobile-controls {
       display: none;
-      width: 100%;
-      max-width: 400px;
+      width: 340px;
+      max-width: 95vw;
       margin-top: 0;
-      padding: 10px 0 14px;
+      padding: 10px 0 16px;
       position: relative;
-      height: 170px;
+      height: 180px;
       user-select: none;
       -webkit-user-select: none;
       touch-action: none;
-      background: linear-gradient(180deg, #bab2a8, #a8a098);
-      border-radius: 0 0 14px 60px;
+      background: linear-gradient(180deg, #c5c3bb, #bab7af);
+      border-radius: 0 0 10px 10px;
       box-shadow:
-        0 4px 12px rgba(0,0,0,0.3),
-        0 1px 0 #ccc8c0 inset;
+        0 6px 16px rgba(0,0,0,0.3),
+        2px 0 0 #dedbd4 inset,
+        -2px 0 0 #a8a59e inset,
+        0 -3px 0 #9a978f inset;
     }
 
+    /* Joystick on recessed circle */
     .joystick-zone {
       position: absolute;
-      left: 12px;
+      left: 10px;
       top: 8px;
       width: 140px;
       height: 140px;
     }
     .joystick-base {
       position: absolute;
-      left: 50%;
-      top: 50%;
+      left: 50%; top: 50%;
       transform: translate(-50%, -50%);
-      width: 110px;
-      height: 110px;
+      width: 110px; height: 110px;
       border-radius: 50%;
-      background: #2a2a2a;
-      border: 3px solid #1a1a1a;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.5) inset, 0 2px 4px rgba(0,0,0,0.3);
+      background: radial-gradient(circle, #c0bdb5, #b0ada5);
+      border: 2px solid #a5a29a;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2) inset;
     }
     .joystick-knob {
       position: absolute;
-      left: 50%;
-      top: 50%;
+      left: 50%; top: 50%;
       transform: translate(-50%, -50%);
-      width: 48px;
-      height: 48px;
+      width: 50px; height: 50px;
       border-radius: 50%;
-      background: radial-gradient(circle at 38% 35%, #555, #2a2a2a);
-      border: 2px solid #444;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.1) inset;
+      background: radial-gradient(circle at 38% 35%, #4a4a4a, #2a2a2a);
+      border: 2px solid #3a3a3a;
+      box-shadow:
+        0 3px 4px rgba(0,0,0,0.5),
+        0 1px 0 rgba(255,255,255,0.1) inset;
       transition: none;
     }
 
-    /* GB-style round purple A/B */
+    /* Mobile A/B on pill base */
     .action-buttons {
       position: absolute;
-      right: 14px;
-      top: 16px;
+      right: 10px;
+      top: 14px;
+    }
+    .ab-pill-base {
+      width: 125px;
+      height: 55px;
+      background: #c0bdb5;
+      border-radius: 28px;
+      transform: rotate(-25deg);
       display: flex;
       align-items: center;
-      gap: 10px;
-      transform: rotate(-25deg);
+      justify-content: center;
+      gap: 14px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.12) inset;
+      position: relative;
     }
     .action-btn {
-      width: 52px;
-      height: 52px;
+      width: 48px; height: 48px;
       border-radius: 50%;
-      background: radial-gradient(circle at 40% 35%, #9a3070, #5a1040);
-      border: 3px solid #4a0a30;
-      color: #e8d0e0;
-      font-size: 0.55rem;
+      background: radial-gradient(circle at 40% 35%, #d83888, #a81858);
+      border: 2px solid #901048;
+      color: #fff;
+      font-size: 0.5rem;
       font-family: 'Press Start 2P', monospace;
       font-weight: bold;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 3px 0 #3a0820, 0 4px 8px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.15) inset;
+      box-shadow:
+        0 3px 0 #701038,
+        0 4px 8px rgba(0,0,0,0.35),
+        0 1px 0 rgba(255,255,255,0.2) inset;
     }
     .action-btn:active, .action-btn.pressed {
-      box-shadow: 0 1px 0 #3a0820, 0 1px 3px rgba(0,0,0,0.4);
+      box-shadow: 0 1px 0 #701038, 0 1px 3px rgba(0,0,0,0.3);
       transform: translateY(2px);
     }
+    .mob-btn-label {
+      position: absolute;
+      font-family: 'Nunito', Arial, sans-serif;
+      font-size: 0.5rem;
+      font-weight: 900;
+      color: #2a2668;
+      font-style: italic;
+    }
+    .mob-label-b { bottom: -16px; left: 22px; }
+    .mob-label-a { bottom: -16px; right: 8px; }
 
+    /* Mobile SELECT/START */
     .meta-buttons {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      bottom: 12px;
+      bottom: 10px;
       display: flex;
-      gap: 18px;
-      align-items: center;
+      gap: 20px;
     }
     .meta-btn-wrap { text-align: center; }
     .meta-btn {
-      width: 44px;
-      height: 12px;
-      background: #555;
+      width: 44px; height: 12px;
+      background: linear-gradient(180deg, #8a877f, #7a7770);
       border: none;
       border-radius: 6px;
       transform: rotate(-25deg);
-      box-shadow: 0 2px 0 #333, 0 1px 4px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.1) inset;
+      box-shadow: 0 1px 0 #605d55, 0 2px 3px rgba(0,0,0,0.2);
       display: block;
       margin: 0 auto;
     }
     .meta-btn:active, .meta-btn.pressed {
-      box-shadow: 0 0 0 #333;
+      box-shadow: 0 0 0 #605d55;
       transform: rotate(-25deg) translateY(2px);
     }
     .meta-label {
-      font-size: 0.28rem;
-      color: #6a6260;
+      font-family: 'Nunito', Arial, sans-serif;
+      font-size: 0.35rem;
+      font-weight: 900;
+      color: #2a2668;
       margin-top: 5px;
-      letter-spacing: 1px;
       text-transform: uppercase;
-      font-family: 'Press Start 2P', monospace;
-    }
-
-    #bottom-brand {
-      margin-top: 6px;
-      font-size: 0.28rem;
-      color: #555;
-      letter-spacing: 3px;
-      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-style: italic;
     }
 
     @media (pointer: coarse) {
       #mobile-controls { display: block; }
       #kb-controls { display: none; }
-      #controls-area { display: none; }
-      .shell-meta { display: none; }
-      #gameboy-shell {
-        border-radius: 14px 14px 0 0;
-        padding-bottom: 6px;
+      #controls-section { display: none; }
+      #phones-label { display: none; }
+      #gb-shell {
+        border-radius: 10px 10px 0 0;
       }
     }
     @media (pointer: fine) {
@@ -467,11 +568,21 @@
 </head>
 <body>
 
-  <div id="gameboy-shell">
-    <div id="shell-notch"></div>
+  <div id="gb-shell">
 
+    <!-- OFF•ON switch -->
+    <div id="power-switch-area">
+      <div id="power-switch">&#9664; OFF&bull;ON &#9654;</div>
+    </div>
+    <div id="top-line"></div>
+
+    <!-- Screen housing -->
     <div id="screen-housing">
-      <div id="screen-label"><span>Dot Matrix with Stereo Sound</span></div>
+      <div id="screen-label">
+        <div class="label-line line-left"></div>
+        <span class="label-text">Dot Matrix with Stereo Sound</span>
+        <div class="label-line line-right"></div>
+      </div>
       <div id="screen-bezel">
         <div id="screen-wrapper">
           <canvas id="gb-canvas" width="160" height="144"></canvas>
@@ -479,56 +590,88 @@
       </div>
       <div id="led-row">
         <div class="led-dot" id="power-led"></div>
-        <span class="led-text">Power</span>
-        <span class="battery-text">Battery</span>
+        <span class="led-label">Battery</span>
       </div>
     </div>
 
-    <div id="brand-row">
-      <span class="dot">●</span>
-      <span class="gb-text">Game Boy</span>
-      <span class="tm">TM</span>
+    <!-- Nintendo GAME BOY branding -->
+    <div id="brand-area">
+      <span class="brand-nintendo">Nintendo</span>
+      <span class="brand-gameboy">GAME BOY</span><span class="brand-tm">TM</span>
     </div>
 
-    <div id="game-title">Tetris</div>
-
-    <div style="text-align:center">
+    <div id="game-controls-overlay">
       <div id="loading">Loading...</div>
       <button id="start-btn">&#9654; Play</button>
     </div>
 
-    <!-- Desktop decorative controls -->
-    <div id="controls-area">
-      <div class="shell-dpad">
-        <div class="shell-dpad-v"></div>
-        <div class="shell-dpad-h"></div>
-        <div class="shell-dpad-center"></div>
+    <!-- Desktop controls (decorative) -->
+    <div id="controls-section">
+      <div id="controls-row">
+        <!-- D-Pad -->
+        <div class="dpad-container">
+          <div class="dpad-circle"></div>
+          <div class="dpad-v"></div>
+          <div class="dpad-h"></div>
+          <div class="dpad-center"></div>
+          <div class="dpad-arrow arrow-up"></div>
+          <div class="dpad-arrow arrow-down"></div>
+          <div class="dpad-arrow arrow-left"></div>
+          <div class="dpad-arrow arrow-right"></div>
+        </div>
+        <!-- A/B buttons -->
+        <div class="ab-area">
+          <div class="ab-base">
+            <div class="shell-btn"></div>
+            <div class="shell-btn"></div>
+            <span class="shell-btn-label label-b">B</span>
+            <span class="shell-btn-label label-a">A</span>
+          </div>
+        </div>
       </div>
-      <div class="shell-buttons">
-        <div class="shell-ab"></div>
-        <div class="shell-ab"></div>
+      <!-- SELECT / START -->
+      <div id="meta-row">
+        <div class="meta-wrap">
+          <div class="shell-meta-btn"></div>
+          <div class="meta-text">Select</div>
+        </div>
+        <div class="meta-wrap">
+          <div class="shell-meta-btn"></div>
+          <div class="meta-text">Start</div>
+        </div>
       </div>
-    </div>
-    <div class="shell-meta">
-      <div class="shell-pill"></div>
-      <div class="shell-pill"></div>
     </div>
 
-    <!-- Speaker -->
-    <div id="speaker-grille"></div>
+    <!-- Speaker grille (diagonal slits) -->
+    <div id="speaker-area">
+      <div class="speaker-slit"></div>
+      <div class="speaker-slit"></div>
+      <div class="speaker-slit"></div>
+      <div class="speaker-slit"></div>
+      <div class="speaker-slit"></div>
+      <div class="speaker-slit"></div>
+    </div>
+
+    <div id="phones-label">&#9676; Phones</div>
   </div>
 
-  <!-- Mobile touch controller -->
+  <!-- ═══════ MOBILE TOUCH CONTROLS ═══════ -->
   <div id="mobile-controls">
     <div class="joystick-zone" id="joystick-zone">
       <div class="joystick-base">
         <div class="joystick-knob" id="joystick-knob"></div>
       </div>
     </div>
+
     <div class="action-buttons">
-      <div><div class="action-btn" data-btn="b">B</div></div>
-      <div><div class="action-btn" data-btn="a">A</div></div>
+      <div class="ab-pill-base">
+        <div class="action-btn" data-btn="b">B</div>
+        <div class="action-btn" data-btn="a">A</div>
+        <span class="mob-btn-label mob-label-b">B</span>
+        <span class="mob-btn-label mob-label-a">A</span>
+      </div>
     </div>
+
     <div class="meta-buttons">
       <div class="meta-btn-wrap">
         <div class="meta-btn" data-btn="select"></div>
@@ -548,21 +691,6 @@
     <kbd>Enter</kbd> Start &nbsp;&bull;&nbsp;
     <kbd>Shift</kbd> Select
   </div>
-
-  <div id="bottom-brand">Nintendo&reg;</div>
-
-  <!-- Speaker grille dots (generated by JS) -->
-  <script>
-    // Generate speaker holes
-    (function() {
-      var g = document.getElementById('speaker-grille');
-      for (var i = 0; i < 36; i++) {
-        var d = document.createElement('div');
-        d.className = 'speaker-hole';
-        g.appendChild(d);
-      }
-    })();
-  </script>
 
   <!-- Emulator dependencies -->
   <script src="resize.js"></script>
@@ -612,7 +740,7 @@
 
     function scaleCanvas() {
       var housing = document.getElementById('screen-bezel');
-      var maxW = housing.clientWidth - 16;
+      var maxW = housing.clientWidth - 20;
       var scale = maxW / 160;
       canvas.style.width = Math.floor(160 * scale) + 'px';
       canvas.style.height = Math.floor(144 * scale) + 'px';
@@ -687,9 +815,8 @@
           updateDirs({ up: false, down: false, left: false, right: false });
           return;
         }
-        var angle = Math.atan2(dy, dx); // right=0, down=π/2, left=±π, up=-π/2
+        var angle = Math.atan2(dy, dx);
         var dirs = { up: false, down: false, left: false, right: false };
-        // Cardinal + diagonal zones (each 135° arc)
         if (angle > -2.75 && angle < -0.39) dirs.up = true;
         if (angle > 0.39 && angle < 2.75) dirs.down = true;
         if (Math.abs(angle) > 1.96) dirs.left = true;
